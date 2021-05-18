@@ -24,9 +24,12 @@
  */
 package net.runelite.client.plugins.dpscounter;
 
+import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+
+import java.awt.*;
 
 @ConfigGroup("dpscounter")
 public interface DpsConfig extends Config
@@ -71,6 +74,40 @@ public interface DpsConfig extends Config
 		description = "Only count damage done to the boss, and not to other NPCs"
 	)
 	default boolean bossDamage()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			keyName = "damageThreshold",
+			name = "Damage Counter Notification Threshold",
+			position = 4,
+			description = "The amount of damage dealt to send a notification at. A value of 0 will disable notification."
+	)
+	default int damageThreshold()
+	{
+		return 60;
+	}
+
+	@Alpha
+	@ConfigItem(
+			position = 5,
+			keyName = "damageNotificationColor",
+			name = "Damage Notification Color",
+			description = "Configures the notification color for Damage warning"
+	)
+	default Color damageNotificationColor()
+	{
+		return new Color(250, 150, 250, 100);
+	}
+
+	@ConfigItem(
+			position = 6,
+			keyName = "enableOverlay",
+			name = "Enable overlay",
+			description = "Turn the overlay on or off"
+	)
+	default boolean enableOverlay()
 	{
 		return false;
 	}

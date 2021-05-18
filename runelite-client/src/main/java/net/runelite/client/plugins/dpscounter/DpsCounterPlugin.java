@@ -40,6 +40,7 @@ import static net.runelite.api.NpcID.*;
 import net.runelite.api.Player;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.NpcDespawned;
+import net.runelite.client.Notifier;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.OverlayMenuClicked;
@@ -120,6 +121,9 @@ public class DpsCounterPlugin extends Plugin
 		ICE_DEMON, ICE_DEMON_7585,
 		SKELETAL_MYSTIC, SKELETAL_MYSTIC_7605, SKELETAL_MYSTIC_7606
 	);
+
+	@Inject
+	private Notifier notifier;
 
 	@Inject
 	private Client client;
@@ -209,6 +213,9 @@ public class DpsCounterPlugin extends Plugin
 				wsClient.send(specialCounterUpdate);
 			}
 			// apply to total
+
+			if( dpsConfig.damageThreshold() > 0 && dpsMember.getDamage() >= dpsConfig.damageThreshold())
+				notifier.notify("[" + name + "] exceeded damage counter threshold!", dpsConfig.damageNotificationColor());
 		}
 		else if (hitsplat.isOthers())
 		{

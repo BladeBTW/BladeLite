@@ -120,6 +120,7 @@ public class Notifier
 	private long mouseLastPressedMillis;
 	private long lastClipMTime = CLIP_MTIME_UNLOADED;
 	private Clip clip = null;
+	private Color flashColor = null;
 
 	@Inject
 	private Notifier(
@@ -155,8 +156,14 @@ public class Notifier
 		notify(message, TrayIcon.MessageType.NONE);
 	}
 
+	public void notify(String message, Color color){
+		notify(message);
+		flashColor = color;
+	}
+
 	public void notify(String message, TrayIcon.MessageType type)
 	{
+		flashColor = runeLiteConfig.notificationFlashColor();
 		eventBus.post(new NotificationFired(message, type));
 
 		if (!runeLiteConfig.sendNotificationsWhenFocused() && clientUI.isFocused())
@@ -269,10 +276,10 @@ public class Notifier
 			return;
 		}
 
-		final Color color = graphics.getColor();
-		graphics.setColor(runeLiteConfig.notificationFlashColor());
+		final Color colorOld = graphics.getColor();
+		graphics.setColor(flashColor);
 		graphics.fill(new Rectangle(client.getCanvas().getSize()));
-		graphics.setColor(color);
+		graphics.setColor(colorOld);
 	}
 
 	private void sendNotification(

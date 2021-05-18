@@ -92,62 +92,62 @@ class DpsOverlay extends OverlayPanel
 	}
 
 	@Override
-	public Dimension render(Graphics2D graphics)
-	{
-		Map<String, DpsMember> dpsMembers = dpsCounterPlugin.getMembers();
-		if (dpsMembers.isEmpty())
-		{
-			return null;
-		}
+	public Dimension render(Graphics2D graphics) {
+		if (dpsConfig.enableOverlay()) {
+			Map<String, DpsMember> dpsMembers = dpsCounterPlugin.getMembers();
+			if (dpsMembers.isEmpty()) {
+				return null;
+			}
 
-		boolean inParty = !partyService.getMembers().isEmpty();
-		boolean showDamage = dpsConfig.showDamage();
-		DpsMember total = dpsCounterPlugin.getTotal();
-		boolean paused = total.isPaused();
+			boolean inParty = !partyService.getMembers().isEmpty();
+			boolean showDamage = dpsConfig.showDamage();
+			DpsMember total = dpsCounterPlugin.getTotal();
+			boolean paused = total.isPaused();
 
-		final String title = (inParty ? "Party " : "") + (showDamage ? "Damage" : "DPS") + (paused ? " (paused)" : "");
-		panelComponent.getChildren().add(
-			TitleComponent.builder()
-				.text(title)
-				.build());
-
-		int maxWidth = ComponentConstants.STANDARD_WIDTH;
-		FontMetrics fontMetrics = graphics.getFontMetrics();
-
-		for (DpsMember dpsMember : dpsMembers.values())
-		{
-			String left = dpsMember.getName();
-			String right = showDamage ? QuantityFormatter.formatNumber(dpsMember.getDamage()) : DPS_FORMAT.format(dpsMember.getDps());
-			maxWidth = Math.max(maxWidth, fontMetrics.stringWidth(left) + fontMetrics.stringWidth(right));
+			final String title = (inParty ? "Party " : "") + (showDamage ? "Damage" : "DPS") + (paused ? " (paused)" : "");
 			panelComponent.getChildren().add(
-				LineComponent.builder()
-					.left(left)
-					.right(right)
-					.build());
-		}
-
-		panelComponent.setPreferredSize(new Dimension(maxWidth + PANEL_WIDTH_OFFSET, 0));
-
-		if (!inParty)
-		{
-			Player player = client.getLocalPlayer();
-			if (player.getName() != null)
-			{
-				DpsMember self = dpsMembers.get(player.getName());
-
-				if (self != null && total.getDamage() > self.getDamage())
-				{
-					panelComponent.getChildren().add(
-						LineComponent.builder()
-							.left(total.getName())
-							.right(showDamage ? Integer.toString(total.getDamage()) : DPS_FORMAT.format(total.getDps()))
+					TitleComponent.builder()
+							.text(title)
 							.build());
+
+			int maxWidth = ComponentConstants.STANDARD_WIDTH;
+			FontMetrics fontMetrics = graphics.getFontMetrics();
+
+			for (DpsMember dpsMember : dpsMembers.values()) {
+				String left = dpsMember.getName();
+				String right = showDamage ? QuantityFormatter.formatNumber(dpsMember.getDamage()) : DPS_FORMAT.format(dpsMember.getDps());
+				maxWidth = Math.max(maxWidth, fontMetrics.stringWidth(left) + fontMetrics.stringWidth(right));
+				panelComponent.getChildren().add(
+						LineComponent.builder()
+								.left(left)
+								.right(right)
+								.build());
+			}
+
+			panelComponent.setPreferredSize(new Dimension(maxWidth + PANEL_WIDTH_OFFSET, 0));
+
+			if (!inParty) {
+				Player player = client.getLocalPlayer();
+				if (player.getName() != null) {
+					DpsMember self = dpsMembers.get(player.getName());
+
+					if (self != null && total.getDamage() > self.getDamage()) {
+						panelComponent.getChildren().add(
+								LineComponent.builder()
+										.left(total.getName())
+										.right(showDamage ? Integer.toString(total.getDamage()) : DPS_FORMAT.format(total.getDps()))
+										.build());
+					}
 				}
 			}
+			return super.render(graphics);
 		}
-
-		return super.render(graphics);
+		else {
+			return null;
+		}
 	}
+
+
 
 	void setPaused(boolean paused)
 	{

@@ -1,40 +1,114 @@
-/*
- * Copyright (c) 2019, TheStonedTurtle <https://github.com/TheStonedTurtle>
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice, this
- *    list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 package net.runelite.client.plugins.socket.plugins.socketDPS.table;
 
 import java.awt.Color;
 import java.util.List;
-import lombok.Builder;
-import lombok.Data;
 
-@Data
-@Builder
-public class SocketTableRow
-{
+
+public class SocketTableRow {
     Color rowColor;
     SocketTableAlignment rowAlignment;
-    @Builder.Default
     List<SocketTableElement> elements;
+
+    public void setRowColor(Color rowColor) {
+        this.rowColor = rowColor;
+    }
+
+    public void setRowAlignment(SocketTableAlignment rowAlignment) {
+        this.rowAlignment = rowAlignment;
+    }
+
+    public void setElements(List<SocketTableElement> elements) {
+        this.elements = elements;
+    }
+
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof SocketTableRow))
+            return false;
+        SocketTableRow other = (SocketTableRow) o;
+        if (!other.canEqual(this))
+            return false;
+        Object this$rowColor = getRowColor(), other$rowColor = other.getRowColor();
+        if ((this$rowColor == null) ? (other$rowColor != null) : !this$rowColor.equals(other$rowColor))
+            return false;
+        Object this$rowAlignment = getRowAlignment(), other$rowAlignment = other.getRowAlignment();
+        if ((this$rowAlignment == null) ? (other$rowAlignment != null) : !this$rowAlignment.equals(other$rowAlignment))
+            return false;
+        Object this$elements = getElements(), other$elements = other.getElements();
+        if ((this$elements == null) ? (other$elements != null) : !this$elements.equals(other$elements)) return false;
+        else{
+            return false;}
+    }
+
+    protected boolean canEqual(Object other) {
+        return other instanceof SocketTableRow;
+    }
+
+    public int hashCode() {
+        int PRIME = 59;
+        int result = 1;
+        Object $rowColor = getRowColor();
+        result = result * 59 + (($rowColor == null) ? 43 : $rowColor.hashCode());
+        Object $rowAlignment = getRowAlignment();
+        result = result * 59 + (($rowAlignment == null) ? 43 : $rowAlignment.hashCode());
+        Object $elements = getElements();
+        return result * 59 + (($elements == null) ? 43 : $elements.hashCode());
+    }
+
+    public String toString() {
+        return "SocketTableRow(rowColor=" + getRowColor() + ", rowAlignment=" + getRowAlignment() + ", elements=" + getElements() + ")";
+    }
+
+    SocketTableRow(Color rowColor, SocketTableAlignment rowAlignment, List<SocketTableElement> elements) {
+        this.rowColor = rowColor;
+        this.rowAlignment = rowAlignment;
+        this.elements = elements;
+    }
+
+    public static SocketTableRowBuilder builder() {
+        return new SocketTableRowBuilder();
+    }
+
+
+    public static class SocketTableRowBuilder {
+        private Color rowColor;
+        private SocketTableAlignment rowAlignment;
+        private List<SocketTableElement> elements;
+
+        public SocketTableRowBuilder rowColor(Color rowColor) {
+            this.rowColor = rowColor;
+            return this;
+        }
+
+        public SocketTableRowBuilder rowAlignment(SocketTableAlignment rowAlignment) {
+            this.rowAlignment = rowAlignment;
+            return this;
+        }
+
+        public SocketTableRowBuilder elements(List<SocketTableElement> elements) {
+            this.elements = elements;
+            return this;
+        }
+
+        public SocketTableRow build() {
+            return new SocketTableRow(this.rowColor, this.rowAlignment, this.elements);
+        }
+
+        public String toString() {
+            return "SocketTableRow.SocketTableRowBuilder(rowColor=" + this.rowColor + ", rowAlignment=" + this.rowAlignment + ", elements=" + this.elements + ")";
+        }
+    }
+
+    public Color getRowColor() {
+        return this.rowColor;
+    }
+
+    public SocketTableAlignment getRowAlignment() {
+        return this.rowAlignment;
+    }
+
+    public List<SocketTableElement> getElements() {
+        return this.elements;
+    }
 }
